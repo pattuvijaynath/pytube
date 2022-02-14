@@ -265,19 +265,7 @@ def get_throttling_function_name(js: str) -> str:
         # https://github.com/ytdl-org/youtube-dl/issues/29326#issuecomment-865985377
         # a.C&&(b=a.get("n"))&&(b=Dea(b),a.set("n",b))}};
         # In above case, `Dea` is the relevant function name
-        #r'a\.[A-Z]&&\(b=a\.get\("n"\)\)&&\(b=([^(]+)\(b\)',
-        r'try\{c\[',
-    ]
-    logger.debug('Finding throttling function name')
-    for pattern in function_patterns:
-        regex = re.compile(pattern)
-        function_match = regex.search(js)
-        if function_match:
-            function_name=re.findall("[A-Za-z]{3}=function\(\w\)",js[:function_match.span()[1]])[-1]
-            logger.debug("finished regex search, matched: %s", pattern)
-            return function_name[:3]
-
-    raise RegexMatchError(
+        r'a\.[A-Z]&&\(b=a\.get\("n"\)\)&&\(b=([^(]+)\(b\)',
     ]
     logger.debug('Finding throttling function name')
     for pattern in function_patterns:
@@ -299,7 +287,6 @@ def get_throttling_function_name(js: str) -> str:
     raise RegexMatchError(
         caller="get_throttling_function_name", pattern="multiple"
     )
-
 
 def get_throttling_function_code(js: str) -> str:
     """Extract the raw code for the throttling function.
